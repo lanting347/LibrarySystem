@@ -12,7 +12,7 @@ public class UserDao {
     private Connection con;
     public boolean isRegistered(String username,String password) throws SQLException {
         boolean IsRegistered=false;
-        password= Md5.md5Password(password);
+//        password= Md5.md5Password(password);
         con= JdbcUtil.getConnecttion();
         String sql="SELECT * FROM user WHERE username=? and password=?";
         try{

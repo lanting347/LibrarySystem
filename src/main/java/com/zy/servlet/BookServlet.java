@@ -1,27 +1,26 @@
 package com.zy.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.*;
+import com.google.gson.Gson;
+import com.zy.bean.Book;
+import com.zy.dao.BookDao;
+import net.sf.json.JSONObject;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-
-import com.google.gson.Gson;
-import com.sun.deploy.net.HttpRequest;
-import com.zy.bean.Book;
-import com.zy.dao.BookDao;
-import net.sf.json.JSONObject;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 
 @WebServlet(name = "BookServlet", urlPatterns = {"/book.do"})
 @MultipartConfig(
         maxFileSize = 5 * 1024 * 1024
 )
 public class BookServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         request.setCharacterEncoding("UTF-8");
         String type = request.getParameter("type");
         if (type.equals("add") || type.equals("update")) {
@@ -33,7 +32,8 @@ public class BookServlet extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         request.setCharacterEncoding("UTF-8");
         String type = request.getParameter("type");
         //不分页显示所有书籍
@@ -121,7 +121,9 @@ public class BookServlet extends HttpServlet {
         String minpdate = request.getParameter("minPdate");
         String maxpdate = request.getParameter("maxPdate");
 
-        String queryParams = "&bookname=" + name + "&cateId=" + cateId + "&minprice=" + minprice + "&maxprice=" + maxprice + "&minPdate=" + minpdate + "&maxPdate=" + maxpdate;
+        String queryParams =
+                "&bookname=" + name + "&cateId=" + cateId + "&minprice=" + minprice + "&maxprice=" + maxprice +
+                        "&minPdate=" + minpdate + "&maxPdate=" + maxpdate;
         request.setAttribute("queryParams", queryParams);
         //因为本查询方式是form的get，会刷新当前页面，导致表单数据丢失，这里为了交互良好起见，把提交前表单的值写入Session中
         HttpSession session = request.getSession();
@@ -148,7 +150,6 @@ public class BookServlet extends HttpServlet {
         sql = "select * " + sql + " limit ?,?";
         System.out.println(sql);
         System.out.println(countSql);
-
 
         //以下作为分页处理
         BookDao bookDao = new BookDao();
@@ -216,7 +217,6 @@ public class BookServlet extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
         rd.forward(request, response);
     }
-
 
     //把添加和更新写在一个方法中
     public void addOrUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
